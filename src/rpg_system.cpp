@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include "rpg_system.h"
 using namespace std;
 
@@ -72,4 +73,34 @@ bool sprzedajPrzedmiot(Player& gracz, Merchant& kupiec, int idPrzedmiotu){
     return false;
 }
 
+void czyscEkran() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
 
+void czekajNaEnter() {
+    cout << "\n[ Nacisnij ENTER, aby kontynuowac... ]";
+    cin.ignore(10000, '\n'); 
+    cin.get(); 
+}
+
+void pokazMape(int aktualnaLokacja) {
+    cout << "\n======================================\n";
+    cout << "             MAPA SWIATA              \n";
+    cout << "======================================\n";
+
+    cout << "  [0] Karczma " << (aktualnaLokacja == 0 ? " <-- [TUTAJ JESTES]" : "") << "\n";
+    cout << "       |\n       V\n";
+    cout << "  [1] Las     " << (aktualnaLokacja == 1 ? " <-- [TUTAJ JESTES]" : "") << "\n";
+    cout << "       |\n       V\n";
+    cout << "  [2] Wioska  " << (aktualnaLokacja == 2 ? " <-- [TUTAJ JESTES]" : "") << "\n";
+    cout << "       |\n       V\n";
+    cout << "  [3] Bagna   " << (aktualnaLokacja == 3 ? " <-- [TUTAJ JESTES]" : "") << "\n";
+    cout << "       |\n       V\n";
+    cout << "  [4] Jaskinia" << (aktualnaLokacja == 4 ? " <-- [TUTAJ JESTES]" : "") << "\n";
+
+    cout << "======================================\n\n";
+}
