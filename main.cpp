@@ -2,60 +2,137 @@
 #include "rpg_system.h"
 
 using namespace std;
+string nazwyLokacji[5] = {"Karczma", "Las", "Wioska", "Bagna", "Jaskinia"};
+void menuHandlu(Player& gracz, Merchant& kupiec) {
+    int wybor = 0;
+    while(wybor != 4) {
+        czyscEkran(); 
+        cout << "\n======================================" << endl;
+        cout << "  STOISKO: " << kupiec.imie << " (Kasa: " << kupiec.gold << ")" << endl;
+        cout << "======================================" << endl;
+        cout << "1. Obejrzyj towary kupca" << endl;
+        cout << "2. Kup przedmiot" << endl;
+        cout << "3. Sprzedaj swoj przedmiot" << endl;
+        cout << "4. Odejdz od stoiska" << endl;
+        cout << "> Czego szukasz? ";
+        cin >> wybor;
 
-int main(){
-    Player gracz = {100, "Kristina", {}};
+        cout << endl;
+        switch(wybor) {
+            case 1:
+                pokazSklep(kupiec);
+                czekajNaEnter();
+                break;
+            case 2: {
+                int id;
+                cout << "Podaj ID przedmiotu do kupienia: ";
+                cin >> id;
+                kupPrzedmiot(gracz, kupiec, id);
+                czekajNaEnter();
+                break;
+            }
+            case 3: {
+                int id;
+                cout << "Podaj ID przedmiotu do sprzedania: ";
+                cin >> id;
+                sprzedajPrzedmiot(gracz, kupiec, id);
+                czekajNaEnter();
+                break;
+            }
+            case 4:
+                cout << kupiec.imie << ": Bywaj. I nie zgin za szybko." << endl;
+                czekajNaEnter();
+                break;
+            default:
+                cout << "Nieznana opcja." << endl;
+                czekajNaEnter();
+        }
+    }
+}
 
-    Merchant kupiec = {500, "Roche", {
+int main() {
+    // 1. Inicjalizacja kupcow
+    Merchant kupiec = {500, "Odo", {
         {1, "Zardzewialy Miecz", 20, ItemRarity::BASIC, ItemCategory::WEAPON},
         {2, "Skorzana Zbroja", 50, ItemRarity::BASIC, ItemCategory::ARMOR},
         {3, "Mikstura Zdrowia", 15, ItemRarity::RARE, ItemCategory::ELIXIR}
     }};
 
-    int wybor = 0;
-    while(wybor!=5){
-        cout << "\n=== MENU ===" << endl;
-        cout << "1. Pokaz moj ekwipunek" << endl;
-        cout << "2. Pokaz towar kupca" << endl;
-        cout << "3. Kup przedmiot" << endl;
-        cout << "4. Sprzedaj przedmiot" << endl;
-        cout << "5. Wyjdz" << endl;
-        cout << "Wybierz akcje: "<<endl;
-        cin >> wybor;
-        cout<< " "<<endl;
-        cout<< " "<<endl;
+    // 2. PROLOG I TWORZENIE POSTACI
+    czyscEkran();
+   
+    string podaneImie;
+    int wyborKlasy;
 
-        switch(wybor) {
+    cout << "Deszcz z loskotem uderzal o zgnile deski Karczmy 'Pod Wisielcem'...\n";
+    cout << "Karczmarz przeciera kufel i patrzy na Ciebie spode lba.\n";
+    cout << "- Jak cie zwa, wedrowcze?\n> ";
+    cin >> podaneImie;
+
+    cout << "\n- A, slyszalem to imie. Podobno jestes...\n";
+    cout << "1. Zbieglym dezerterem (150 HP, 20 zlota)\n";
+    cout << "2. Zrujnowanym szlachcicem (80 HP, 200 zlota)\n";
+    cout << "3. Wedrownym alchemikiem (110 HP, 100 zlota)\n> ";
+    cin >> wyborKlasy;
+
+    Player gracz;
+    gracz.imie = podaneImie;
+    gracz.aktualnaLokacja = 0;
+    
+    switch(wyborKlasy) {
+        case 1: gracz.maxHp = 150; gracz.hp = 150; gracz.gold = 20; break;
+        case 2: gracz.maxHp = 80; gracz.hp = 80; gracz.gold = 200; break;
+        case 3: gracz.maxHp = 110; gracz.hp = 110; gracz.gold = 100; break;
+        default: gracz.maxHp = 100; gracz.hp = 100; gracz.gold = 50; break;
+    }
+
+    czekajNaEnter();
+
+    int wyborGlowny = 0;
+    while(wyborGlowny != 5) {
+        czyscEkran();
+        
+        // HUD - Statystyki widoczne cały czas
+        cout << "=================================================\n";
+        cout << " BOHATER: " << gracz.imie 
+             << " | ZLOTO: " << gracz.gold 
+             << " | HP: " << gracz.hp << "/" << gracz.maxHp << "\n";
+        cout << " LOKACJA: "<<nazwyLokacji[gracz.aktualnaLokacja]<<"\n";
+        cout << "=================================================\n";
+        
+        cout << "Co robisz dalej?\n";
+        cout << "1. Sprawdz swoj ekwipunek\n";
+        cout << "2. Podejdz do kupca w rogu sali (" << kupiec.imie << ")\n";
+        cout << "3. Spojrz na mape\n";
+        cout << "4. Wyjdz z karczmy na szlak (Jeszcze niedostepne)\n"; 
+        cout << "5. Zakoncz gre\n";
+        cout << "> ";
+        cin >> wyborGlowny;
+
+        switch(wyborGlowny) {
             case 1:
                 pokazEkwipunek(gracz);
+                czekajNaEnter();
                 break;
             case 2:
-                pokazSklep(kupiec);
+                menuHandlu(gracz, kupiec);
                 break;
-            case 3: {
-                int id;
-                cout << "Podaj ID przedmiotu do kupienia: ";
-                cin >> id;
-                kupPrzedmiot(gracz, kupiec, id);
+            case 3:
+                pokazMape(gracz.aktualnaLokacja);
+                czekajNaEnter();
                 break;
-                        
-            }
-            case 4: {
-                int id;
-                cout << "Podaj ID przedmiotu ktory chcesz sprzedac: ";
-                cin >> id;
-                sprzedajPrzedmiot(gracz, kupiec, id);
+            case 4:
+                cout << "\nJeszcze nie jestes gotowy na Mroczny Trakt...\n";
+                czekajNaEnter();
                 break;
-            }
             case 5:
-                cout << "Bywaj!" << endl;
+                cout << "\nOpuszczasz Zelazna Knieje. Do zobaczenia!\n";
                 break;
             default:
-                cout << "Nieznana opcja." << endl;
+                cout << "\nNieznana opcja.\n";
+                czekajNaEnter();
         }
     }
 
     return 0;
-
 }
-
