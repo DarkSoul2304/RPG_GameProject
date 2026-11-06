@@ -27,7 +27,10 @@ struct Item{
 };
 
 struct Player{
+    int hp;
+    int maxHp;
     int gold;
+    int aktualnaLokacja;
     std::string imie;
     std::vector<Item> ekwipunek; //wektor w ktorym kazdy element jest pojedyncza struktura Item
 };
@@ -47,3 +50,8 @@ void pokazEkwipunek(const Player& gracz);
 
 bool kupPrzedmiot(Player& gracz, Merchant& kupiec, int idPrzedmiotu);
 bool sprzedajPrzedmiot(Player& gracz, Merchant& kupiec, int idPrzedmiotu);
+
+void czyscEkran();
+void czekajNaEnter();
+
+void pokazMape(int aktualnaLokalizacja);
