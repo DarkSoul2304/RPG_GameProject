@@ -104,7 +104,7 @@ int main() {
         cout << "1. Sprawdz swoj ekwipunek\n";
         cout << "2. Podejdz do kupca w rogu sali (" << kupiec.imie << ")\n";
         cout << "3. Spojrz na mape\n";
-        cout << "4. Wyjdz z karczmy na szlak (Jeszcze niedostepne)\n"; 
+        cout << "4. Wyjdz z karczmy na szlak\n"; 
         cout << "5. Zakoncz gre\n";
         cout << "> ";
         cin >> wyborGlowny;
@@ -122,7 +122,33 @@ int main() {
                 czekajNaEnter();
                 break;
             case 4:
-                cout << "\nJeszcze nie jestes gotowy na Mroczny Trakt...\n";
+                int kierunek;
+                cout << "\nDokad chcesz wyruszyc?\n";
+                cout << "1. Na wschod (W glab Kniei)\n";
+                cout << "2. Na zachod (Powrot)\n";
+                cout << "3. Zostan tutaj\n> ";
+                cin >> kierunek;
+                if(kierunek==1){
+                    if(gracz.aktualnaLokacja<4){
+                        gracz.aktualnaLokacja++;
+                        cout<<"Wyruszasz w drogę do " << nazwyLokacji[gracz.aktualnaLokacja]<<endl;
+                    } else {
+                        cout<<"Nie możesz wyruszyc dalej, dalej jest tylko przepaść\n";
+                    }
+                }
+                else if(kierunek==2){
+                    if(gracz.aktualnaLokacja==0){
+                        cout<<"Nie masz gdzie wracać, tam jest tylko przepaść!\n";
+                    } else {
+                        gracz.aktualnaLokacja--;
+                        cout<<"Wyruszasz w drogę do " << nazwyLokacji[gracz.aktualnaLokacja]<<endl;
+                    }
+                }
+                else if(kierunek==3){
+                }
+                else{
+                    cout<<"Nieznana opcja.\n";
+                }
                 czekajNaEnter();
                 break;
             case 5:
