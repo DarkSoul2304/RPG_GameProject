@@ -58,6 +58,11 @@ int main() {
         {3, "Mikstura Zdrowia", 15, ItemRarity::RARE, ItemCategory::ELIXIR}
     }};
 
+    Merchant kupiec_wioska = {1000, "Kaelen", {
+        {4, "Stalowy Miecz", 120, ItemRarity::RARE, ItemCategory::WEAPON},
+        {5, "Ciezka Zbroja", 200, ItemRarity::EPIC, ItemCategory::ARMOR}
+    }};
+
     // 2. PROLOG I TWORZENIE POSTACI
     czyscEkran();
    
@@ -115,13 +120,20 @@ int main() {
                 czekajNaEnter();
                 break;
             case 2:
-                menuHandlu(gracz, kupiec);
+                if(gracz.aktualnaLokacja == 0){
+                    menuHandlu(gracz, kupiec_karczma);
+                } else if (gracz.aktualnaLokacja == 2){
+                    menuHandlu(gracz, kupiec_wioska);
+                } else {
+                    cout<<"Rozgladasz sie, ale nie ma tu z kim handlowac.\n";
+                    czekajNaEnter();
+                }
                 break;
             case 3:
                 pokazMape(gracz.aktualnaLokacja);
                 czekajNaEnter();
                 break;
-            case 4:
+            case 4:{
                 int kierunek;
                 cout << "\nDokad chcesz wyruszyc?\n";
                 cout << "1. Na wschod (W glab Kniei)\n";
@@ -151,6 +163,7 @@ int main() {
                 }
                 czekajNaEnter();
                 break;
+            }
             case 5:
                 cout << "\nOpuszczasz Zelazna Knieje. Do zobaczenia!\n";
                 break;
