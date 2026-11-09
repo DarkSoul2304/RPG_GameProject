@@ -41,6 +41,15 @@ struct Merchant{
     std::vector<Item> asortyment;
 };
 
+struct Enemy {
+    std::string nazwa;
+    int hp;
+    int maxHp;
+    int minDamage;
+    int maxDamage;
+    int goldDrop; 
+};
+
 inline bool czyPelnyEkwipunek(const Player& gracz){
     return gracz.ekwipunek.size() >= MAX_INVENTORY_SIZE;
 }
