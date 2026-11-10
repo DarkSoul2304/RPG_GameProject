@@ -1,4 +1,3 @@
-#pragma once
 #include <string>
 #include <vector>
 
@@ -64,3 +63,5 @@ void czyscEkran();
 void czekajNaEnter();
 
 void pokazMape(int aktualnaLokalizacja);
+
+bool battle(Player& gracz, Enemy potwor);
