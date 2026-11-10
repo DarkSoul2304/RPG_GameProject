@@ -3,6 +3,7 @@
 
 using namespace std;
 string nazwyLokacji[5] = {"Karczma", "Las", "Wioska", "Bagna", "Jaskinia"};
+
 void menuHandlu(Player& gracz, Merchant& kupiec) {
     int wybor = 0;
     while(wybor != 4) {
@@ -52,15 +53,15 @@ void menuHandlu(Player& gracz, Merchant& kupiec) {
 
 int main() {
     // 1. Inicjalizacja kupcow
-    Merchant kupiec = {500, "Odo", {
+    Merchant kupiec_karczma = {500, "Odo", {
         {1, "Zardzewialy Miecz", 20, ItemRarity::BASIC, ItemCategory::WEAPON},
         {2, "Skorzana Zbroja", 50, ItemRarity::BASIC, ItemCategory::ARMOR},
         {3, "Mikstura Zdrowia", 15, ItemRarity::RARE, ItemCategory::ELIXIR}
     }};
 
     Merchant kupiec_wioska = {1000, "Kaelen", {
-        {4, "Stalowy Miecz", 120, ItemRarity::RARE, ItemCategory::WEAPON},
-        {5, "Ciezka Zbroja", 200, ItemRarity::EPIC, ItemCategory::ARMOR}
+        {1, "Stalowy Miecz", 120, ItemRarity::RARE, ItemCategory::WEAPON},
+        {2, "Ciezka Zbroja", 200, ItemRarity::EPIC, ItemCategory::ARMOR}
     }};
 
     // 2. PROLOG I TWORZENIE POSTACI
@@ -107,18 +108,20 @@ int main() {
         
         cout << "Co robisz dalej?\n";
         cout << "1. Sprawdz swoj ekwipunek\n";
-        cout << "2. Podejdz do kupca w rogu sali (" << kupiec.imie << ")\n";
+        cout << "2. Rozejrzyj sie za kupcem\n";
         cout << "3. Spojrz na mape\n";
-        cout << "4. Wyjdz z karczmy na szlak\n"; 
+        cout << "4. Wyjdz z karczmy na szlak (Jeszcze niedostepne)\n"; 
         cout << "5. Zakoncz gre\n";
         cout << "> ";
         cin >> wyborGlowny;
 
         switch(wyborGlowny) {
+            
             case 1:
                 pokazEkwipunek(gracz);
                 czekajNaEnter();
                 break;
+            
             case 2:
                 if(gracz.aktualnaLokacja == 0){
                     menuHandlu(gracz, kupiec_karczma);
@@ -129,10 +132,12 @@ int main() {
                     czekajNaEnter();
                 }
                 break;
+            
             case 3:
                 pokazMape(gracz.aktualnaLokacja);
                 czekajNaEnter();
                 break;
+            
             case 4:{
                 int kierunek;
                 cout << "\nDokad chcesz wyruszyc?\n";
@@ -167,6 +172,7 @@ int main() {
             case 5:
                 cout << "\nOpuszczasz Zelazna Knieje. Do zobaczenia!\n";
                 break;
+            
             default:
                 cout << "\nNieznana opcja.\n";
                 czekajNaEnter();
