@@ -104,3 +104,73 @@ void pokazMape(int aktualnaLokacja) {
 
     cout << "======================================\n\n";
 }
+
+bool battle(Player& gracz, Enemy potwor){
+    czyscEkran();
+    cout << "!!! WALKA !!!\n";
+    cout << "Na twojej drodze staje " << potwor.nazwa << "!\n";
+    czekajNaEnter();
+
+    while(gracz.hp > 0 && potwor.hp > 0){
+        czyscEkran();
+        cout << "--- " << potwor.nazwa << " (HP: " << potwor.hp << "/" << potwor.maxHp << ") ---\n";
+        cout << "BOHATER: " << gracz.imie << " (HP: " << gracz.hp << "/" << gracz.maxHp << ")\n";
+        cout << "================================\n";
+        cout << "1. Atakuj mieczem\n";
+        cout << "2. Uzyj mikstury\n";
+        cout << "3. Uciekaj\n> ";
+
+        int akcja;
+        cin>>akcja;
+
+        if(akcja == 1){
+            potwor.hp -= 20;
+            if(potwor.hp>0) gracz.hp -= potwor.maxDamage;
+        }
+
+        else if (akcja == 2){
+            bool maMiksture = false;
+            for (size_t i = 0; i < gracz.ekwipunek.size(); i++) {
+                if (gracz.ekwipunek[i].category == ItemCategory::ELIXIR) {
+                maMiksture = true;
+                gracz.hp += 20;
+                if (gracz.hp > gracz.maxHp){
+                    gracz.hp = gracz.maxHp; // Blokujemy na maksimum!
+                }
+                
+                gracz.ekwipunek.erase(gracz.ekwipunek.begin() + i);
+                cout << "Wypijasz miksture. Czujesz przyplyw sil!\n";
+                break;
+            }
+        }
+        if (maMiksture == false) {
+            cout << "Przeszukujesz torbe, ale nie masz zadnych mikstur!\n";
+        }
+        gracz.hp -= potwor.maxDamage; 
+        czekajNaEnter();
+        }
+    
+        else if(akcja == 3) {
+            cout<<"Uciekasz w panice!";
+            czekajNaEnter();
+            return true;
+        }
+        
+        else {
+        cout<<"Nieznana opcja, tracisz runde!\n";
+        gracz.hp -= potwor.maxDamage;
+        czekajNaEnter();
+    }
+    }
+
+    if (gracz.hp <= 0) {
+        cout << "Polegles w walce z " << potwor.nazwa << "...\n";
+        czekajNaEnter();
+        return false; // Gracz nie żyje
+    } else {
+        cout << "Zabijasz " << potwor.nazwa << " i zdobywasz " << potwor.goldDrop << " zlota!\n";
+        gracz.gold += potwor.goldDrop;
+        czekajNaEnter();
+        return true; // Gracz wygrał
+    }
+}
