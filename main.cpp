@@ -1,4 +1,7 @@
 #include <iostream>
+#include <cstdlib> // Do rand() i srand()
+#include <ctime>   // Do time()
+#include "rpg_system.h"
 #include "rpg_system.h"
 
 using namespace std;
@@ -52,6 +55,7 @@ void menuHandlu(Player& gracz, Merchant& kupiec) {
 }
 
 int main() {
+    srand(time(NULL));
     // 1. Inicjalizacja kupcow
     Merchant kupiec_karczma = {500, "Odo", {
         {1, "Zardzewialy Miecz", 20, ItemRarity::BASIC, ItemCategory::WEAPON},
@@ -110,7 +114,7 @@ int main() {
         cout << "1. Sprawdz swoj ekwipunek\n";
         cout << "2. Rozejrzyj sie za kupcem\n";
         cout << "3. Spojrz na mape\n";
-        cout << "4. Wyjdz z karczmy na szlak (Jeszcze niedostepne)\n"; 
+        cout << "4. Wyjdz z karczmy na szlak\n"; 
         cout << "5. Zakoncz gre\n";
         cout << "> ";
         cin >> wyborGlowny;
@@ -145,10 +149,12 @@ int main() {
                 cout << "2. Na zachod (Powrot)\n";
                 cout << "3. Zostan tutaj\n> ";
                 cin >> kierunek;
+                bool ruszylSie = false;
                 if(kierunek==1){
                     if(gracz.aktualnaLokacja<4){
                         gracz.aktualnaLokacja++;
                         cout<<"Wyruszasz w drogę do " << nazwyLokacji[gracz.aktualnaLokacja]<<endl;
+                        ruszylSie = true;
                     } else {
                         cout<<"Nie możesz wyruszyc dalej, dalej jest tylko przepaść\n";
                     }
@@ -159,6 +165,7 @@ int main() {
                     } else {
                         gracz.aktualnaLokacja--;
                         cout<<"Wyruszasz w drogę do " << nazwyLokacji[gracz.aktualnaLokacja]<<endl;
+                        ruszylSie = true;
                     }
                 }
                 else if(kierunek==3){
@@ -167,10 +174,27 @@ int main() {
                     cout<<"Nieznana opcja.\n";
                 }
                 czekajNaEnter();
+                if(ruszylSie){
+                    if(gracz.aktualnaLokacja == 1 || gracz.aktualnaLokacja == 3 || gracz.aktualnaLokacja == 4 ){
+                        if(rand()%100<50){
+                            Enemy potwor;
+                            if (gracz.aktualnaLokacja == 1) {
+                                potwor = {"Wsciekly Wilk", 40, 40, 5, 12, 15}; // Las
+                            } else if (gracz.aktualnaLokacja == 3) {
+                                potwor = {"Topielec", 60, 60, 10, 18, 30}; // Bagna
+                            } else if (gracz.aktualnaLokacja == 4) {
+                                potwor = {"Troll Jaskiniowy", 120, 120, 15, 25, 100}; // Jaskinia
+                            }
+                            bool przezyl = battle(gracz, potwor);
+                            if(!przezyl){
+                                wyborGlowny = 5;
+                            }
+                        }
+                    }
+                }
                 break;
             }
             case 5:
-                cout << "\nOpuszczasz Zelazna Knieje. Do zobaczenia!\n";
                 break;
             
             default:
@@ -178,6 +202,24 @@ int main() {
                 czekajNaEnter();
         }
     }
-
+    
+    czyscEkran();
+    cout << "\n=================================================\n";
+    
+    if (gracz.hp <= 0) {
+        cout << "                   KONIEC GRY\n";
+        cout << " Twoje cialo uzyzni mroczna ziemie...\n";
+    } else {
+        cout << " Opuszczasz Zelazna Knieje caly i zdrow. Do zobaczenia!\n";
+    }
+    
+    cout << "=================================================\n";
+    cout << " PODSUMOWANIE TWOJEJ PRZYGODY:\n";
+    cout << " - Bohater: " << gracz.imie << "\n";
+    cout << " - Zgromadzone zloto: " << gracz.gold << " monet\n";
+    cout << " - Ostatnia lokacja: " << nazwyLokacji[gracz.aktualnaLokacja] << "\n";
+    cout << "=================================================\n";
+    
+    czekajNaEnter();
     return 0;
 }
