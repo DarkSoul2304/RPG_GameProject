@@ -20,6 +20,7 @@ void menuHandlu(Player& gracz, Merchant& kupiec) {
         cout << "4. Odejdz od stoiska" << endl;
         cout << "> Czego szukasz? ";
         cin >> wybor;
+        czyscBufor();
 
         cout << endl;
         switch(wybor) {
@@ -31,6 +32,7 @@ void menuHandlu(Player& gracz, Merchant& kupiec) {
                 int id;
                 cout << "Podaj ID przedmiotu do kupienia: ";
                 cin >> id;
+                czyscBufor();
                 kupPrzedmiot(gracz, kupiec, id);
                 czekajNaEnter();
                 break;
@@ -39,6 +41,7 @@ void menuHandlu(Player& gracz, Merchant& kupiec) {
                 int id;
                 cout << "Podaj ID przedmiotu do sprzedania: ";
                 cin >> id;
+                czyscBufor();
                 sprzedajPrzedmiot(gracz, kupiec, id);
                 czekajNaEnter();
                 break;
@@ -58,14 +61,14 @@ int main() {
     srand(time(NULL));
     // 1. Inicjalizacja kupcow
     Merchant kupiec_karczma = {500, "Odo", {
-        {1, "Zardzewialy Miecz", 20, ItemRarity::BASIC, ItemCategory::WEAPON},
-        {2, "Skorzana Zbroja", 50, ItemRarity::BASIC, ItemCategory::ARMOR},
-        {3, "Mikstura Zdrowia", 15, ItemRarity::RARE, ItemCategory::ELIXIR}
+        {1, "Zardzewialy Miecz", 20, ItemRarity::BASIC, ItemCategory::WEAPON, 10},
+        {2, "Skorzana Zbroja", 50, ItemRarity::BASIC, ItemCategory::ARMOR, 15},
+        {3, "Mikstura Zdrowia", 15, ItemRarity::RARE, ItemCategory::ELIXIR, 30}
     }};
 
     Merchant kupiec_wioska = {1000, "Kaelen", {
-        {1, "Stalowy Miecz", 120, ItemRarity::RARE, ItemCategory::WEAPON},
-        {2, "Ciezka Zbroja", 200, ItemRarity::EPIC, ItemCategory::ARMOR}
+        {1, "Stalowy Miecz", 120, ItemRarity::RARE, ItemCategory::WEAPON, 35},
+        {2, "Ciezka Zbroja", 200, ItemRarity::EPIC, ItemCategory::ARMOR, 40}
     }};
 
     // 2. PROLOG I TWORZENIE POSTACI
@@ -78,12 +81,14 @@ int main() {
     cout << "Karczmarz przeciera kufel i patrzy na Ciebie spode lba.\n";
     cout << "- Jak cie zwa, wedrowcze?\n> ";
     cin >> podaneImie;
+    czyscBufor();
 
     cout << "\n- A, slyszalem to imie. Podobno jestes...\n";
     cout << "1. Zbieglym dezerterem (150 HP, 20 zlota)\n";
     cout << "2. Zrujnowanym szlachcicem (80 HP, 200 zlota)\n";
     cout << "3. Wedrownym alchemikiem (110 HP, 100 zlota)\n> ";
     cin >> wyborKlasy;
+    czyscBufor();
 
     Player gracz;
     gracz.imie = podaneImie;
@@ -95,8 +100,10 @@ int main() {
         case 3: gracz.maxHp = 110; gracz.hp = 110; gracz.gold = 100; break;
         default: gracz.maxHp = 100; gracz.hp = 100; gracz.gold = 50; break;
     }
-
+   
     czekajNaEnter();
+    gracz.zalozonaBron = {0, "Gole Piesci", 0, ItemRarity::BASIC, ItemCategory::WEAPON, 5}; 
+    gracz.zalozonyPancerz = {0, "Podstawowy stroj", 0, ItemRarity::BASIC, ItemCategory::ARMOR, 0};
 
     int wyborGlowny = 0;
     while(wyborGlowny != 5) {
@@ -107,6 +114,8 @@ int main() {
         cout << " BOHATER: " << gracz.imie 
              << " | ZLOTO: " << gracz.gold 
              << " | HP: " << gracz.hp << "/" << gracz.maxHp << "\n";
+        cout << " BRON: " << gracz.zalozonaBron.nazwa << " (+" << gracz.zalozonaBron.wartoscEfektu << " DMG)\n";
+        cout << " PANCERZ: " << gracz.zalozonyPancerz.nazwa << " (-" << gracz.zalozonyPancerz.wartoscEfektu << "% DMG)\n";
         cout << " LOKACJA: "<<nazwyLokacji[gracz.aktualnaLokacja]<<"\n";
         cout << "=================================================\n";
         
@@ -118,6 +127,7 @@ int main() {
         cout << "5. Zakoncz gre\n";
         cout << "> ";
         cin >> wyborGlowny;
+        czyscBufor();
 
         switch(wyborGlowny) {
             
@@ -149,6 +159,7 @@ int main() {
                 cout << "2. Na zachod (Powrot)\n";
                 cout << "3. Zostan tutaj\n> ";
                 cin >> kierunek;
+                czyscBufor();
                 bool ruszylSie = false;
                 if(kierunek==1){
                     if(gracz.aktualnaLokacja<4){
