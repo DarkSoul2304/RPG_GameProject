@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 
@@ -23,6 +24,7 @@ struct Item{
     int basicPrice;
     ItemRarity rarity;
     ItemCategory category;
+    int wartoscEfektu;
 };
 
 struct Player{
@@ -32,6 +34,8 @@ struct Player{
     int aktualnaLokacja;
     std::string imie;
     std::vector<Item> ekwipunek; //wektor w ktorym kazdy element jest pojedyncza struktura Item
+    Item zalozonaBron;
+    Item zalozonyPancerz;
 };
 
 struct Merchant{
@@ -61,6 +65,7 @@ bool sprzedajPrzedmiot(Player& gracz, Merchant& kupiec, int idPrzedmiotu);
 
 void czyscEkran();
 void czekajNaEnter();
+void czyscBufor();
 
 void pokazMape(int aktualnaLokalizacja);
 
