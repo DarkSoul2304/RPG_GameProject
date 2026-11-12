@@ -81,9 +81,13 @@ void czyscEkran() {
     #endif
 }
 
+void czyscBufor() {
+    cin.clear();
+    cin.ignore(10000, '\n');
+}
+
 void czekajNaEnter() {
     cout << "\n[ Nacisnij ENTER, aby kontynuowac... ]";
-    cin.ignore(10000, '\n'); 
     cin.get(); 
 }
 
@@ -122,6 +126,7 @@ bool battle(Player& gracz, Enemy potwor){
 
         int akcja;
         cin>>akcja;
+        czyscBufor();
 
         if(akcja == 1){
             potwor.hp -= 20;
