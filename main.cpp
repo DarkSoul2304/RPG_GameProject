@@ -7,6 +7,60 @@
 using namespace std;
 string nazwyLokacji[5] = {"Karczma", "Las", "Wioska", "Bagna", "Jaskinia"};
 
+void menuEkwipunku(Player& gracz) {
+    int wybor = 0;
+    while(wybor != 2) {
+        czyscEkran();
+        cout << "\n======================================" << endl;
+        cout << "       ZARZADZANIE EKWIPUNKIEM        " << endl;
+        cout << "======================================" << endl;
+        cout << " BRON: " << gracz.zalozonaBron.nazwa << " (+" << gracz.zalozonaBron.wartoscEfektu << " DMG)\n";
+        cout << " PANCERZ: " << gracz.zalozonyPancerz.nazwa << " (-" << gracz.zalozonyPancerz.wartoscEfektu << "% DMG)\n";
+        cout << "--------------------------------------" << endl;
+        pokazEkwipunek(gracz);
+        cout << "--------------------------------------" << endl;
+        cout << "1. Zaloz przedmiot z plecaka" << endl;
+        cout << "2. Wroc do menu glownego" << endl;
+        cout << "> ";
+        cin >> wybor;
+        czyscBufor();
+
+        if (wybor == 1) {
+            int id;
+            cout << "Podaj ID przedmiotu do zalozenia: ";
+            cin >> id;
+            czyscBufor();
+
+            bool znaleziono = false;
+            for (size_t i = 0; i < gracz.ekwipunek.size(); i++) {
+                if (gracz.ekwipunek[i].ID == id) {
+                    znaleziono = true;
+                    Item wybranyItem = gracz.ekwipunek[i]; // Kopiujemy wybrany przedmiot
+
+                    if (wybranyItem.category == ItemCategory::WEAPON) {
+                        gracz.ekwipunek[i] = gracz.zalozonaBron; // Stara bron wraca do plecaka
+                        gracz.zalozonaBron = wybranyItem;        // Nowa wedruje do rak
+                        cout << "Zalozyles: " << wybranyItem.nazwa << "!\n";
+                    } 
+                    else if (wybranyItem.category == ItemCategory::ARMOR) {
+                        gracz.ekwipunek[i] = gracz.zalozonyPancerz; // Stary pancerz wraca do plecaka
+                        gracz.zalozonyPancerz = wybranyItem;        // Nowy wedruje na cialo
+                        cout << "Zalozyles: " << wybranyItem.nazwa << "!\n";
+                    }
+                    else {
+                        cout << "Nie mozesz tego zalozyc! (To prawdopodobnie mikstura).\n";
+                    }
+                    break; // Konczymy szukanie
+                }
+            }
+            if (!znaleziono) {
+                cout << "Nie masz w plecaku przedmiotu o takim ID.\n";
+            }
+            czekajNaEnter();
+        }
+    }
+}
+
 void menuHandlu(Player& gracz, Merchant& kupiec) {
     int wybor = 0;
     while(wybor != 4) {
